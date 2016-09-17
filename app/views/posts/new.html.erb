@@ -1,13 +1,35 @@
-<%= form_for(@post) do |f| %>
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<div id="postResult">
+  <%= form_for(@post) do |f| %>
+    <div class="field" id="postTitle">
+      <%= f.label :title %><br>
+      <%= f.text_field :title, id:"title" %>
+    </div>
+    <div class="field" id="postBody">
+      <%= f.label :description %><br>
+      <%= f.text_field :description, id:"description" %>
+    </div>
+    <div class="actions" id="postResult">
+      <%= f.submit("Submit Post") %>
+    </div>
+  <% end %>
+</div>
+
+
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+    $('form').submit(function(event) {
+      event.preventDefault();
+
+      var values = $(this).serialize();
+
+      var posting = $.post('/posts', values);
+
+      posting.done(function(data) {
+        var post = data["post"];
+        $("#postTitle").text(post["title"]);
+        $("#postBody").text(post["description"]);
+      });
+    });
+  });
+</script>
